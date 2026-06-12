@@ -1,0 +1,26 @@
+# ── Core LangChain ─────────────────────────────────────────────────────────────
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-core==0.3.17
+
+# ── LangChain integrations ─────────────────────────────────────────────────────
+langchain-huggingface==0.1.2   # HuggingFace embeddings wrapper
+langchain-chroma==0.1.4        # Chroma vector store integration
+
+# ── Vector store ────────────────────────────────────────────────────────────────
+chromadb==0.5.20
+
+# ── Embeddings (runs fully offline / local CPU) ─────────────────────────────────
+sentence-transformers==3.2.1
+
+# ── LLM provider ───────────────────────────────────────────────────────────────
+groq>=1.4.0                    # direct SDK; langchain-groq has httpx incompatibility with this httpx version
+
+# ── Document loading ────────────────────────────────────────────────────────────
+pypdf==4.3.1                   # PDF support (for future real documents)
+
+# ── Interface ───────────────────────────────────────────────────────────────────
+streamlit==1.39.0
+
+# ── Utilities ───────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1
