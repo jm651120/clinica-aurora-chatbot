@@ -20,12 +20,22 @@ User query
     ▼
 [ChromaDB]  ──── cosine similarity ──→  top-6 chunks
     │             (committed to repo for instant cold start)
+    │
+    ▼
+[Pack Augmentation]             if query involves a pack comparison, prepend
+    │                           a pre-computed, authoritative price block —
+    │                           the LLM formats facts, never calculates them
     ▼
 [Groq API]  ──── Llama 3.1 8B Instant ──→  grounded answer
     │             free tier · ~1 s latency
     ▼
+[Post-processor]                deterministic PT-PT normalization (regex)
+    │                           + guardrail enforcement (hard-stop truncation)
+    ▼
 [Streamlit chat UI]  ──→  answer + optional source citations
 ```
+
+Two of the pipeline stages are entirely deterministic — no LLM, no probability. The design principle: delegate to the LLM only what requires generative capability (composing grounded text); handle everything else in code.
 
 ---
 
@@ -43,6 +53,16 @@ We evaluated both this model and `paraphrase-multilingual-MiniLM-L12-v2` against
 
 `langchain-groq` was removed after discovering an httpx API incompatibility (the package passes a `proxies` kwarg that httpx ≥ 0.28 dropped). The `groq` Python SDK is used directly — simpler, faster, and one fewer abstraction layer.
 
+### Pack comparison — pre-computed context injection
+
+Pack vs. avulso questions have exactly one correct answer. Testing showed that Llama 3.1 8B reliably produced wrong results: inverting the comparison direction and computing incorrect savings figures. This is a deterministic problem — delegating it to a probabilistic model is the wrong tool. The fix: `src/pack_comparison.py` hardcodes the authoritative numbers and injects a structured `╔══ DADOS CALCULADOS ══╗` block at the top of the retrieval context when a pack query is detected. The LLM's only job is to format and present pre-verified numbers.
+
+### Output post-processing — PT-PT normalization
+
+Llama 3.1 8B was trained on a corpus dominated by Brazilian Portuguese. Despite explicit system-prompt instructions, it reliably drifts toward "você" and other BR-PT forms in conversational contexts — this is a training-data phenomenon that prompt instructions cannot fully override. The fix: `src/postprocessing.py` applies a deterministic regex pass after every generation call. The same module enforces a hard stop on social-engineering guardrail responses, truncating any content that bleeds through after the refusal sentence.
+
+The architectural lesson: **prompt instructions fail predictably for small-vocabulary normalization problems where the model's weights disagree with the instruction**. Code is the right layer for those fixes.
+
 ### ChromaDB committed to git
 
 For Streamlit Community Cloud deployment, the vector store (`chroma_db/`) is committed to the repository. This avoids a ~30–60 s cold start on the free tier while the embedding model downloads and re-embeds all documents on every dyno restart. The trade-off is ~5 MB added to the repo — acceptable for a demo project.
@@ -54,14 +74,17 @@ For Streamlit Community Cloud deployment, the vector store (`chroma_db/`) is com
 ```
 clinica-aurora-chatbot/
 ├── data/                       # Clinic knowledge base (edit these to customise)
-│   ├── faq.md                  # 19 Q&As — treatments, age, pregnancy, booking…
-│   ├── tratamentos.md          # Full treatment catalogue with prices (€)
-│   ├── politicas.md            # Booking, cancellation, payment, RGPD policies
+│   ├── faq.md                  # 21 Q&As — treatments, age, pregnancy, booking, glossary
+│   ├── tratamentos.md          # Full treatment catalogue with descriptions and prices
+│   ├── precos.md               # Dedicated price table — all services in one dense file
+│   ├── politicas.md            # Booking, cancellation, payment, RGPD, emergency policy
 │   └── contactos.md            # Location, hours, team, accessibility
 ├── src/
 │   ├── ingestion.py            # Load → chunk → embed → persist ChromaDB
 │   ├── retrieval.py            # Similarity search + context formatter
-│   └── generation.py          # Groq API call + RAG prompt
+│   ├── generation.py           # Groq API call + RAG prompt
+│   ├── pack_comparison.py      # Pre-computed pack data + query detection
+│   └── postprocessing.py       # PT-PT normalization + guardrail enforcement
 ├── tests/
 │   ├── test_retrieval.py       # 12-case retrieval quality suite (scores + sources)
 │   └── test_generation.py     # 7-case end-to-end suite + interactive REPL
@@ -197,3 +220,4 @@ No other code changes required.
 
 - **Conversational retrieval drift**: in long multi-turn conversations, a vague follow-up query (e.g. *"E quanto dura?"*) may retrieve irrelevant chunks because the retriever sees only the current turn, not the conversation history. The LLM compensates from parametric memory but this is a hallucination risk. Mitigation: the query rewriting step helps, but a full history-aware rewriter would be more robust.
 - **Colloquial Portuguese**: the English embedding model handles formal clinic vocabulary and expanded queries well. Very obscure slang not covered by the rewriting examples may still underperform. The rewrite prompt can be extended with additional examples at any time.
+- **Pack detection scope**: `pack_comparison.py` currently injects Pack Noiva data for any pack-comparison query. If the user asks specifically about the Pack Anti-Envelhecimento comparison, the injected data is still Pack Noiva. Extending detection to select the correct pack by name is straightforward — the data structure already supports it.

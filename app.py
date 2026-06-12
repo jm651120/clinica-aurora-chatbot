@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 
 from src.retrieval import load_vectorstore, retrieve, format_context
 from src.generation import generate_response, rewrite_query
+from src.postprocessing import sanitize as sanitize_output
+from src.pack_comparison import is_pack_query, build_pack_context
 
 load_dotenv()
 
@@ -86,17 +88,25 @@ if prompt := st.chat_input("Escreva a sua pergunta aqui …"):
         st.markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    # Retrieve → Generate
+    # Retrieve → Augment → Generate → Sanitize
     with st.chat_message("assistant"):
         with st.spinner("A pesquisar e a preparar resposta …"):
             expanded_query = rewrite_query(prompt)
             docs = retrieve(expanded_query, vectorstore)
             context = format_context(docs)
+
+            # Prepend pre-computed pack data when the query involves a pack
+            # comparison. The LLM receives authoritative numbers and is
+            # instructed (rule 6) to format them rather than recalculate.
+            if is_pack_query(prompt) or is_pack_query(expanded_query):
+                context = build_pack_context("pack_noiva") + "\n\n" + context
+
             answer = generate_response(
                 query=prompt,
                 context=context,
                 history=st.session_state.messages[:-1],  # exclude current turn
             )
+            answer = sanitize_output(answer)
 
         st.markdown(answer)
 
