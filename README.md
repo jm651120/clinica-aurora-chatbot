@@ -2,7 +2,7 @@
 
 A production-ready **Retrieval-Augmented Generation (RAG)** chatbot for a Portuguese aesthetic clinic, built entirely on the free tier. Serves as a business demo for applying RAG to Portuguese SMEs.
 
-**Live demo:** *(add your Streamlit Cloud URL here after deployment)*
+**Live demo:** https://clinica-aurora-chatbot-ad3ipttduedhfnzm7mdl9x.streamlit.app/
 
 ---
 
