@@ -12,10 +12,9 @@ ROOT_DIR = Path(__file__).parent.parent
 PERSIST_DIR = ROOT_DIR / "chroma_db"
 EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
-# Number of chunks to retrieve per query.
-# 4 gives the LLM ~2 000 tokens of context — enough for detail without
-# exceeding Llama 3.1 8B's useful attention range.
-DEFAULT_K = 4
+# Retrieve 6 chunks: wider net helps when query expansion shifts the semantic
+# neighbourhood, and Llama 3.1 8B handles ~3 000 tokens of context fine.
+DEFAULT_K = 6
 
 
 def load_vectorstore() -> Chroma:

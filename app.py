@@ -9,7 +9,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from src.retrieval import load_vectorstore, retrieve, format_context
-from src.generation import generate_response
+from src.generation import generate_response, rewrite_query
 
 load_dotenv()
 
@@ -89,7 +89,8 @@ if prompt := st.chat_input("Escreva a sua pergunta aqui …"):
     # Retrieve → Generate
     with st.chat_message("assistant"):
         with st.spinner("A pesquisar e a preparar resposta …"):
-            docs = retrieve(prompt, vectorstore)
+            expanded_query = rewrite_query(prompt)
+            docs = retrieve(expanded_query, vectorstore)
             context = format_context(docs)
             answer = generate_response(
                 query=prompt,
@@ -101,6 +102,8 @@ if prompt := st.chat_input("Escreva a sua pergunta aqui …"):
 
         # Format sources for optional display
         source_text = ""
+        if show_sources and expanded_query != prompt:
+            source_text += f"*Query expandida: `{expanded_query}`*\n\n"
         for i, doc in enumerate(docs, 1):
             src = doc.metadata.get("source", "desconhecido")
             snippet = doc.page_content[:120].replace("\n", " ").strip()

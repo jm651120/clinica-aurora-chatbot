@@ -105,11 +105,29 @@ TEST_CASES = [
         [],   # no expected source — we want low scores here
         "FORA DO ESCOPO — cirurgia",
     ),
+    # ── Colloquial queries — tested after query expansion ─────────────────────
+    # In production, rewrite_query() expands these before retrieval. Here we
+    # pass the expanded form directly so the test runs without a Groq API key.
+    (
+        "pés de galinha rugas cantos dos olhos toxina botulínica botox",
+        ["tratamentos.md", "faq.md"],
+        "COLOQUIAL (expandido) — pés de galinha → botox",
+    ),
+    (
+        "bigode chinês sulcos nasolabiais rugas ácido hialurónico preenchimento facial",
+        ["tratamentos.md", "faq.md"],
+        "COLOQUIAL (expandido) — bigode chinês → ácido hialurónico",
+    ),
+    (
+        "hospitalização emergência médica cancelamento penalização dispensada comprovativo",
+        ["politicas.md"],
+        "COLOQUIAL — emergência médica + cancelamento",
+    ),
 ]
 
 # ── Core test runner ──────────────────────────────────────────────────────────
 
-def run_tests(k: int = 4) -> dict:
+def run_tests(k: int = 6) -> dict:
     print(f"\n{BOLD}{'=' * 62}{RESET}")
     print(f"{BOLD}  Clínica Aurora — Retrieval Quality Test Suite{RESET}")
     print(f"{BOLD}{'=' * 62}{RESET}")
@@ -145,19 +163,19 @@ def run_tests(k: int = 4) -> dict:
         # Verdict
         if is_oos:
             if top_score < 0.50:
-                verdict = f"{GREEN}✓ PASS{RESET} — top score {top_score:.2f} correctly low (out-of-scope)"
+                verdict = f"{GREEN}OK PASS{RESET} — top score {top_score:.2f} correctly low (out-of-scope)"
                 passed += 1
             else:
-                verdict = (f"{RED}✗ FAIL{RESET} — top score {top_score:.2f} is HIGH for an "
+                verdict = (f"{RED}FAIL FAIL{RESET} — top score {top_score:.2f} is HIGH for an "
                            f"out-of-scope query (possible false match)")
                 failed += 1
         else:
             hit = bool(retrieved_sources & set(expected_sources))
             if hit:
-                verdict = f"{GREEN}✓ PASS{RESET} — expected source found in top-{k}"
+                verdict = f"{GREEN}OK PASS{RESET} — expected source found in top-{k}"
                 passed += 1
             else:
-                verdict = (f"{RED}✗ FAIL{RESET} — expected {expected_sources} "
+                verdict = (f"{RED}FAIL FAIL{RESET} — expected {expected_sources} "
                            f"not in retrieved {sorted(retrieved_sources)}")
                 failed += 1
             if top_score < 0.45:
@@ -192,7 +210,7 @@ def run_tests(k: int = 4) -> dict:
 
 # ── Interactive REPL ──────────────────────────────────────────────────────────
 
-def interactive_mode(k: int = 4) -> None:
+def interactive_mode(k: int = 6) -> None:
     print(f"\n{BOLD}Interactive retrieval probe{RESET} (type 'exit' to quit)")
     print(f"k = {k} chunks per query\n")
     vs = load_vectorstore()
@@ -223,14 +241,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Retrieval quality tests")
     parser.add_argument("--interactive", "-i", action="store_true",
                         help="Open an interactive query REPL after the test suite")
-    parser.add_argument("--k", type=int, default=4,
-                        help="Number of chunks to retrieve (default: 4)")
+    parser.add_argument("--k", type=int, default=6,
+                        help="Number of chunks to retrieve (default: 6)")
     args = parser.parse_args()
 
-    # Enable ANSI colours on Windows
+    # Enable ANSI colours and UTF-8 output on Windows
     if sys.platform == "win32":
         import os
         os.system("color")
+        sys.stdout.reconfigure(encoding="utf-8")
 
     run_tests(k=args.k)
 

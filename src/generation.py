@@ -43,6 +43,55 @@ def _get_client() -> Groq:
     return Groq(api_key=api_key)
 
 
+_REWRITE_PROMPT = """\
+Reescreve esta pergunta de cliente de uma clínica de estética, adicionando sinónimos clínicos \
+portugueses aos termos coloquiais. Mantém os termos originais e acrescenta os formais. \
+Devolve APENAS a query expandida, sem explicações ou pontuação extra.
+
+Exemplos:
+"pés de galinha" → "pés de galinha rugas cantos dos olhos toxina botulínica botox"
+"bigode chinês" → "bigode chinês sulcos nasolabiais rugas ácido hialurónico preenchimento facial"
+"casca de laranja" → "casca de laranja celulite radiofrequência massagem modeladora"
+"pneuzinhos" → "pneuzinhos gordura flancos gordura localizada criolipólise"
+"papada" → "papada gordura mento criolipólise duplo queixo"
+"olheiras" → "olheiras sulco lacrimal ácido hialurónico preenchimento"
+"dói?" → "dói dor desconforto sensação durante tratamento"
+"código de barras" → "código de barras rugas lábios ácido hialurónico preenchimento"
+Se não houver termos coloquiais, devolve a pergunta sem alterações.
+
+Pergunta: {query}
+Expandida:\
+"""
+
+
+def rewrite_query(query: str) -> str:
+    """
+    Expand colloquial Portuguese terms to formal clinical vocabulary before
+    retrieval. The English embedding model cannot semantically encode phrases
+    like 'pés de galinha' or 'bigode chinês', so adding their clinical
+    equivalents (botox, sulcos nasolabiais) creates a query vector that
+    actually lands near the right document chunks.
+
+    Falls back to the original query silently on any error.
+    """
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        return query
+    try:
+        client = _get_client()
+        resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[{"role": "user",
+                       "content": _REWRITE_PROMPT.format(query=query)}],
+            temperature=0,
+            max_tokens=80,
+        )
+        expanded = resp.choices[0].message.content.strip()
+        return expanded if expanded else query
+    except Exception:
+        return query
+
+
 def generate_response(query: str, context: str, history: list[dict]) -> str:
     """
     Run the full RAG generation step and return the assistant's reply.

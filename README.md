@@ -12,13 +12,13 @@ A production-ready **Retrieval-Augmented Generation (RAG)** chatbot for a Portug
 User query
     │
     ▼
-[Streamlit UI]
-    │
+[Query Rewriting]               Groq LLM expands colloquial PT terms to
+    │                           clinical vocabulary before embedding
     ▼
 [HuggingFace Embeddings]        sentence-transformers/all-MiniLM-L6-v2
     │                           runs fully offline on CPU (~50 ms/query)
     ▼
-[ChromaDB]  ──── cosine similarity ──→  top-4 chunks
+[ChromaDB]  ──── cosine similarity ──→  top-6 chunks
     │             (committed to repo for instant cold start)
     ▼
 [Groq API]  ──── Llama 3.1 8B Instant ──→  grounded answer
@@ -187,7 +187,7 @@ No other code changes required.
 | Chunk size | 500 chars | Fits one complete Q&A or section without splitting |
 | Chunk overlap | 50 chars | Prevents answers from being split at chunk boundaries |
 | Chunk separators | `\n## `, `\n### `, `\n\n`, `\n`, … | Respects Markdown heading structure |
-| Retrieval k | 4 | ~2,000 tokens of context; sufficient for multi-part answers |
+| Retrieval k | 6 | Wider net needed after query expansion shifts the semantic neighbourhood |
 | LLM | `llama-3.1-8b-instant` via Groq | Fast, free, good factual grounding |
 | LLM temperature | 0.2 | Factual over creative |
 | Max tokens | 1,024 | Concise answers; prevents padding |
@@ -195,5 +195,5 @@ No other code changes required.
 
 ## Known limitations
 
-- **Conversational retrieval drift**: in long multi-turn conversations, a vague follow-up query (e.g. *"E quanto dura?"*) may retrieve irrelevant chunks because the retriever sees only the current turn, not the conversation history. The LLM compensates from parametric memory but this is a hallucination risk. Future fix: a query-rewriting step that produces a self-contained search query from the last user turn + history before retrieval.
-- **Colloquial Portuguese**: the English embedding model handles formal clinic vocabulary well but may underperform on informal slang or regional expressions. Acceptable for a customer-service chatbot; re-evaluate if the audience skews toward very informal language.
+- **Conversational retrieval drift**: in long multi-turn conversations, a vague follow-up query (e.g. *"E quanto dura?"*) may retrieve irrelevant chunks because the retriever sees only the current turn, not the conversation history. The LLM compensates from parametric memory but this is a hallucination risk. Mitigation: the query rewriting step helps, but a full history-aware rewriter would be more robust.
+- **Colloquial Portuguese**: the English embedding model handles formal clinic vocabulary and expanded queries well. Very obscure slang not covered by the rewriting examples may still underperform. The rewrite prompt can be extended with additional examples at any time.
