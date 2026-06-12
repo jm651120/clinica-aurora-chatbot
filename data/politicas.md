@@ -44,6 +44,9 @@ A ausência à marcação sem qualquer contacto prévio implica o pagamento de *
 ### Como Cancelar
 O cancelamento deve ser efetuado através do mesmo canal utilizado para a marcação (telefone, e-mail ou website). Cancelamentos por SMS são aceites apenas fora do horário de funcionamento.
 
+### Exceções por Força Maior e Emergência Médica
+A Clínica Aurora reconhece que situações imprevistas e graves podem impedir a comparência. Em caso de **emergência médica documentada** (hospitalização, urgência médica ou acidente), a penalização de cancelamento tardio é **totalmente dispensada**, mediante apresentação de comprovativo médico (declaração hospitalar ou atestado médico) no prazo de 5 dias úteis após a data da marcação. Nestes casos, a marcação pode ser remarcada sem qualquer custo. Outras situações de força maior (falecimento de familiar direto, catástrofe natural) são avaliadas caso a caso pela direção da clínica.
+
 ### Atrasos
 - **Atraso até 10 minutos:** O tratamento é realizado com a duração restante, sem custo adicional.
 - **Atraso superior a 10 minutos:** A clínica poderá, a seu critério, realizar o tratamento numa versão reduzida ou propor reagendamento. O custo total do tratamento original mantém-se.

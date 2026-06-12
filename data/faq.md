@@ -125,4 +125,57 @@ Para cancelamentos com mais de 48 horas de antecedência, não existe qualquer c
 ---
 
 ### 19. Têm algum pacote especial para noivas?
-Sim! O **Pack Noiva** foi especialmente concebido para preparação para o casamento. Inclui 3 limpezas de pele, 2 peelings químicos, 1 sessão de mesoterapia e 1 sessão de laser rejuvenescimento facial. O protocolo decorre ao longo de 3 a 4 meses antes do grande dia. O preço do Pack Noiva é 550€ (valor individual dos tratamentos: 730€). Para começar o protocolo com antecedência adequada, recomendamos marcar consulta com pelo menos 4 meses de antecedência.
+Sim! O **Pack Noiva** foi especialmente concebido para preparação para o casamento. Inclui:
+- 3 limpezas de pele profunda (55€ cada = 165€)
+- 2 peelings químicos superficiais (75€ cada = 150€)
+- 1 sessão de mesoterapia facial (120€)
+- 1 sessão de laser rejuvenescimento facial (200€)
+
+**Preço total do pack: 550€** (valor individual dos tratamentos: 635€ — poupa 85€). O protocolo decorre ao longo de 3 a 4 meses antes do grande dia. Para começar com a antecedência adequada, recomendamos marcar consulta com pelo menos 4 meses de antecedência.
+
+---
+
+### 20. Glossário: como se chamam em linguagem comum os problemas que tratam?
+Muitos clientes chegam sem saber o nome clínico do que querem tratar. Aqui está a correspondência entre os termos coloquiais e os tratamentos disponíveis na Clínica Aurora:
+
+**Rosto — rugas e volume**
+- **Pés de galinha** (rugas nos cantos dos olhos) → Toxina Botulínica (Botox)
+- **Ruga do mal** / **ruga entre as sobrancelhas** → Toxina Botulínica (Botox)
+- **Linhas da testa** → Toxina Botulínica (Botox)
+- **Bigode chinês** / **sulcos do nariz à boca** / **rugas nasolabiais** → Preenchimento com Ácido Hialurónico
+- **Código de barras** (rugas finas ao redor dos lábios) → Preenchimento com Ácido Hialurónico
+- **Olheiras fundas** / **olhos encovados** → Preenchimento com Ácido Hialurónico
+- **Lábios finos** / **quero aumentar os lábios** → Preenchimento com Ácido Hialurónico
+- **Manchas no rosto** / **manchas de sol** → Peeling Químico, Laser Rejuvenescimento Facial
+- **Poros dilatados** / **pele com textura irregular** → Microneedling, Peeling Químico
+- **Rugas finas generalizadas** / **pele sem viço** → Mesoterapia, Microneedling
+- **Rosto caído** / **flacidez do rosto** → Bioestimulador de Colagénio, Radiofrequência
+
+**Corpo — gordura e flacidez**
+- **Celulite** / **casca de laranja** / **pele de laranja** → Radiofrequência Corporal, Massagem Modeladora
+- **Gordura da barriga** / **barriguinha** → Criolipólise
+- **Pneuzinhos** / **gordura dos lados** / **flancos** → Criolipólise
+- **Culotes** / **gordura das coxas** → Criolipólise
+- **Braços flácidos** → Radiofrequência Corporal, Criolipólise
+- **Pernas inchadas** / **pernas cansadas** → Pressoterapia, Drenagem Linfática Manual
+- **Retenção de líquidos** → Drenagem Linfática Manual, Pressoterapia
+
+**Pelo**
+- **Pelo do lábio** / **buço** → Depilação a Laser (zona buço)
+- **Pelos das axilas** → Depilação a Laser (zona axilas)
+- **Depilação definitiva** / **depilação permanente** → Depilação a Laser
+
+---
+
+### 21. Os tratamentos doem? É doloroso?
+Depende do tratamento. Aqui está o que esperar:
+
+- **Toxina Botulínica (Botox):** Sensação de picada leve com agulha fina. A maioria dos clientes descreve como indolor ou com desconforto mínimo. Duração da aplicação: 20–30 minutos.
+- **Preenchimento com Ácido Hialurónico:** Pode haver alguma sensibilidade no local, especialmente nos lábios. Aplicamos creme anestésico previamente para minimizar o desconforto.
+- **Depilação a Laser:** Sensação de "estalo de elástico" quente. Tolerável para a maioria. Zonas mais sensíveis (virilhas, lábio superior) podem ser mais desconfortáveis.
+- **Criolipólise:** Sensação intensa de frio e pressão durante os primeiros minutos. Depois a zona anestesia naturalmente. Sem dor após o tratamento.
+- **Peelings Químicos:** Ligeira ardência durante a aplicação, que desaparece rapidamente. Peelings mais profundos podem causar vermelhidão por 1–3 dias.
+- **Microneedling:** Ligeiro desconforto; aplicamos creme anestésico 30 minutos antes.
+- **Radiofrequência, Pressoterapia, Drenagem Linfática:** Indolores ou com sensação agradável de calor/massagem.
+
+Se tiver dúvidas sobre um tratamento específico, a nossa equipa explicará tudo em detalhe na consulta de avaliação.
